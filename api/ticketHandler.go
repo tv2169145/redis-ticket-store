@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gomodule/redigo/redis"
 	"github.com/tv2169145/redis-ticket-store/localTickit"
 	"github.com/tv2169145/redis-ticket-store/redisConnection"
 	redisTicket "github.com/tv2169145/redis-ticket-store/remoteTicket"
@@ -12,7 +11,7 @@ import (
 )
 
 var (
-	redisPool *redis.Pool
+	//redisPool *redis.Pool
 	done chan int
 	LocalTicket *localTickit.LocalTicket
 	RemoteTicket *redisTicket.RemoteTicketsKeys
@@ -21,13 +20,13 @@ var (
 func init() {
 	LocalTicket = localTickit.NewLocalTicket(100, 0)
 	RemoteTicket = redisTicket.NewRemoteTicketKeys()
-	redisPool = redisConnection.NewPool()
+	//redisPool = redisConnection.NewPool()
 	done = make(chan int, 1)
 	done<-1
 }
 
 func BuyTicket(c *gin.Context) {
-	redisConn := redisPool.Get()
+	redisConn := redisConnection.GetRedisConn()
 	//全局讀寫鎖
 	<-done
 	result, msg := services.BuyTicketByRedis(redisConn, LocalTicket, RemoteTicket)

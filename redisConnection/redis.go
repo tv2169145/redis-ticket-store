@@ -4,6 +4,12 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+var RedisPool *redis.Pool
+
+func init() {
+	RedisPool = NewPool()
+}
+
 func NewPool() *redis.Pool {
 	return &redis.Pool{
 		MaxIdle:   10000,
@@ -16,4 +22,8 @@ func NewPool() *redis.Pool {
 			return c, nil
 		},
 	}
+}
+
+func GetRedisConn() redis.Conn {
+	return RedisPool.Get()
 }
