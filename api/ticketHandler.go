@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	//redisPool *redis.Pool
 	done chan int
 	LocalTicket *localTickit.LocalTicket
 	RemoteTicket *redisTicket.RemoteTicketsKeys
@@ -20,7 +19,6 @@ var (
 func init() {
 	LocalTicket = localTickit.NewLocalTicket(100, 0)
 	RemoteTicket = redisTicket.NewRemoteTicketKeys()
-	//redisPool = redisConnection.NewPool()
 	done = make(chan int, 1)
 	done<-1
 }
